@@ -1,0 +1,6 @@
+generated/*
+local/
+
+*.asv
+
+**/_data/*.mat
