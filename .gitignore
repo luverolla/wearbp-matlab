@@ -2,6 +2,9 @@
 generated/headerfiles/*
 generated/numerics/*
 generated/tables/*
+!generated/headerfiles
+!generated/numerics
+!generated/tables
 
 # user-reserved space
 local/
@@ -11,7 +14,10 @@ local/
 
 # records from datasets
 datasets/**/_data/*.mat
+!datasets/**/_data
 
 # graphic files
 graphics/pdf/*
 graphics/svg/*
+!graphics/pdf
+!graphics/svg
