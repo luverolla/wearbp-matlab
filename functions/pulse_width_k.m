@@ -1,10 +1,5 @@
 function pulse_width = pulse_width_k(signal, K, ref_zero)
-    % Function to compute the signal width at K% amplitude
-    % Input: 
-    %   signal - the discrete signal (vector)
-    %   K - the percentage (scalar in the range [0, 100])
-    % Output:
-    %   width - the pulse width at K% amplitude
+%PULSE_WIDTH_K Computes pulse width at K% height of signal
     
     % Step 1: Find the maximum amplitude of the signal
     x_max = max(signal) - ref_zero;

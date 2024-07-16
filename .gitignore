@@ -1,6 +1,17 @@
-generated/*
+# generated files
+generated/headerfiles/*
+generated/numerics/*
+generated/tables/*
+
+# user-reserved space
 local/
 
+# Matlab's temp files
 *.asv
 
-**/_data/*.mat
+# records from datasets
+datasets/**/_data/*.mat
+
+# graphic files
+graphics/pdf/*
+graphics/svg/*

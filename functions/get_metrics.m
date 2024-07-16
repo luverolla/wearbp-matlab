@@ -1,6 +1,6 @@
 function [row] = get_metrics(sig_name, sigwin, fs)
-%GET_METRICS Computes metrics for signal selection by given signal sigwin
-% and sampling frequency.
+%GET_METRICS Computes metrics for signal selection by given signal and
+% sampling frequency.
 %   Signal name (ABP or PPG) must be also given, a single-row table is
 %   returned
 arguments
@@ -10,7 +10,7 @@ arguments
 end
 
 normwin = normalize(sigwin, 'range');
-[sig_peaks, sig_valleys, sig_dt_peaks, sig_notches] = find_pv_thresh(normwin);
+[sig_peaks, sig_valleys, sig_dt_peaks, sig_notches] = get_fiducials(normwin);
 
 % signal is so malformed that either one of the following happened
 % - no peaks (and thus no valleys) can be found
@@ -38,25 +38,39 @@ vvh = []; % valley-to-valley height
 for i = 1:length(sig_peaks)-1
     curr_p = sig_peaks(i); % current peak
     next_p = sig_peaks(i+1); % next peak
-    next_v = next_valley(sig_peaks(i), sig_valleys); % valley next to peak
+    next_v = next_fiducial(curr_p, next_p, sig_valleys); % valley next to peak
 
     if ~isempty(next_v) && next_v > 0
         pvd = [pvd (next_v-curr_p)/fs];
         pvh = [pvh abs(normwin(next_v)-normwin(curr_p))];
     end
     ppd = [ppd (next_p-curr_p)/fs];
-    pph = [pph abs(normwin(next_p)-normwin(curr_p))];
+end
+
+for i=1:numel(sig_peaks)-1
+    for j=i+1:numel(sig_peaks)
+        v1 = sig_peaks(i);
+        v2 = sig_peaks(j);
+        pph = [vvh abs(normwin(v1)-normwin(v2))];
+    end
+end
+
+for i=1:numel(sig_valleys)-1
+    for j=i+1:numel(sig_valleys)
+        v1 = sig_valleys(i);
+        v2 = sig_valleys(j);
+        vvh = [vvh abs(normwin(v1)-normwin(v2))];
+    end
 end
 
 for i = 1:length(sig_valleys)-1
     curr_v = sig_valleys(i); % current valley
     next_v = sig_valleys(i+1); % next valley
-    next_p = next_peak(sig_valleys(i), sig_peaks); % peak after valley
+    next_p = next_fiducial(curr_v, next_v, sig_peaks); % peak after valley
 
     vpd = [vvd (next_p-curr_v)/fs];
     vph = [vph abs(normwin(next_p)-normwin(curr_v))];
     vvd = [vvd (next_v-curr_v)/fs];
-    vvh = [vvh abs(normwin(next_v)-normwin(curr_v))];
 end
 
 % if the check against empty peak/valley set passed, the condition chain

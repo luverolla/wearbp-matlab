@@ -1,8 +1,11 @@
 function [fig] = plt_signal_vs_proj(sig, fs, wmat, type, k)
-%PLOT_SIGNAL_VS_PROJ Plots signal and its projection on the k-th wavelet
-% band
-%   Detailed explanation goes here
-figure
+%PLOT_SIGNAL_VS_PROJ Plots signal and its k-th wavelet band projection
+%   This function creates a figure and plots a given signal and its k-th
+%   projection on a band resulting from a wavelet transform.
+%   
+%   This function is independent on the particular wavelet used, and the
+%   result of GET_WAVELET_MATRIX must be passed as the argument wmat
+figure('Visible','off'); % only save to file
 hold on
 grid on
 

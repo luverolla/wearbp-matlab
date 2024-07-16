@@ -1,6 +1,9 @@
 function [] = var2hfile(filename, vars, names)
-%VAR2HFILE Summary of this function goes here
-%   Detailed explanation goes here
+%VAR2HFILE Save Matlab arrays and matrices inside a .h file
+%   This function can save scalars and monodimentional arrays.
+%   Matrices are reshaped as monodimentional arrays so that they can be
+%   easily passed as parameter to the matrix-related function in the 
+%   ARM CMSIS DSP library.
 
 fid = fopen(filename,'w');
 for i=1:numel(vars)

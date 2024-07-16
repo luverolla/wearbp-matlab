@@ -1,6 +1,5 @@
 function [] = save_graphics(fig, path)
-%SAVE_GRAPHICS Summary of this function goes here
-%   Detailed explanation goes here
+%SAVE_GRAPHICS Save a figure as PDF for LaTeX and SVG for PowerPoint
 set(fig,'PaperOrientation','landscape');
 set(fig,'PaperUnits','normalized');
 set(fig,'PaperPosition', [0 0 1 1]);

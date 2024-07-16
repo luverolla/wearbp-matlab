@@ -1,9 +1,10 @@
 import os
 from joblib import Parallel, delayed
 import scipy.io as scio
+import scipy.signal as sig
 import vitaldb
 
-N_JOBS = 8
+N_JOBS = 8 # change according to the PHYSICAL cores of your machine
 
 if not os.path.exists('./data'):
     os.mkdir('./data')
@@ -17,6 +18,14 @@ def process_case(i):
     
     print(f'Processing case {cases[i]} ({i}/{len(cases)})', flush=True)
     case_data = vitaldb.load_case(cases[i], ['ART', 'PLETH'], 1/500)
+
+    # downsample
+    secs = len(case_data[:,0])/500
+    samps = secs*125
+    abp = sig.resample(case_data[:,0], samps)
+    ppg = sig.resample(case_data[:,1], samps)
+
+    # save to compressed .mat file
     scio.savemat(case_path, {'abp_raw': case_data[:,0], 'ppg_raw': case_data[:,1]}, do_compression=True)
 
 Parallel(n_jobs=N_JOBS)(delayed(process_case)(i) for i in range(len(cases)))

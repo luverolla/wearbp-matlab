@@ -1,6 +1,12 @@
-function [st_peaks, valleys, dt_peaks, notches] = find_pv_thresh(sig, st_thres, dt_thres)
-    %FIND_PEAKS_THRESH Summary of this function goes here
-    %   Detailed explanation goes here
+function [st_peaks, valleys, dt_peaks, notches] = ...
+get_fiducials(sig, st_thres, dt_thres)
+    %FIND_PEAKS_THRESH Gets fiducial points of an ABP or PPG signal
+    %   st_thres and dt_thres are the minimum amplitude that a potential 
+    %   local maxima must have to be considered respectively a systolic
+    %   peak or a diastolic peak. In detail, for each maxima M:
+    %       - sig(M) >= st_thres, maxima is systolic peak
+    %       - dt_thres <= sig(M) < st_thres, maxima is diastolic peak
+    %       - sig(M) < dt_thres, maxima is not a valid peak
     arguments
         sig (1,:) double
         st_thres (1,1) double = 0.65
@@ -8,7 +14,7 @@ function [st_peaks, valleys, dt_peaks, notches] = find_pv_thresh(sig, st_thres, 
     end
 
     % normalize signal (if already normed it changes nothing)
-    %sig = normalize(x, 'range');
+    sig = normalize(sig, 'range');
 
     st_peaks = [];
     dt_peaks = [];
